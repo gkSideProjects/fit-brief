@@ -1,0 +1,50 @@
+{
+  "name": "fit-brief",
+  "version": "0.1.0",
+  "description": "Converts Garmin .fit files into a compact, LLM-optimised representation for cycling coaching conversations",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "lint": "oxlint src",
+    "format": "oxfmt src",
+    "brief": "node --import tsx/esm scripts/brief.ts",
+    "eval:export": "node --import tsx/esm eval/harness.ts"
+  },
+  "dependencies": {
+    "fit-file-parser": "2.3.3"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.46.0",
+    "@types/node": "^20.0.0",
+    "fast-check": "^4.7.0",
+    "oxlint": "^1.61.0",
+    "tsdown": "^0.21.10",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.0",
+    "vitest": "^4.1.5"
+  }
+}
