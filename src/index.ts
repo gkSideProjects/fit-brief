@@ -1,6 +1,7 @@
 export { parse } from './parse.js'
 export { toCompact } from './compact.js'
 export { toMarkdown } from './serialise/markdown.js'
+export { toHistoryLine } from './serialise/history.js'
 export type {
   CompactActivity,
   ActivitySummary,

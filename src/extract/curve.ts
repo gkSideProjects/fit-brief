@@ -1,7 +1,7 @@
 import type { PdPoint, RawActivity } from '../types.js'
 
 // Standard power-duration curve durations to report (seconds)
-const PD_DURATIONS = [5, 10, 30, 60, 120, 300, 600, 1200, 1800, 3600] as const
+const PD_DURATIONS = [5, 10, 30, 60, 120, 300, 600, 1200, 1800, 3600, 5400, 7200] as const
 
 /**
  * Compute peak mean power for standard durations from the 1-second power stream.

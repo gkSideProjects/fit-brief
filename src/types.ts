@@ -101,6 +101,8 @@ export interface HrZones {
 export interface Effort {
   readonly startOffsetSeconds: number
   readonly durationSeconds: number
+  /** Coggan power zone (2–7) for this effort */
+  readonly zone: number
   readonly avgPowerW?: number
   readonly maxPowerW?: number
   readonly normalizedPowerW?: number

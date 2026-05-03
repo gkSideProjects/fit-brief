@@ -19,7 +19,7 @@ export function parse(buffer: Buffer): Promise<RawActivity> {
       mode: 'list',
     })
 
-    parser.parse(buffer, (error: Error | null, data: unknown) => {
+    parser.parse(buffer as never, (error: unknown, data: unknown) => {
       if (error) {
         reject(error)
         return

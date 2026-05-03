@@ -66,11 +66,11 @@ export function extractHrZones(activity: RawActivity, config: ZoneConfig): HrZon
 }
 
 // Coggan 7-zone boundaries as % of FTP
-function cogganBoundaries(ftp: number): readonly number[] {
+export function cogganBoundaries(ftp: number): readonly number[] {
   return [0.55, 0.75, 0.90, 1.05, 1.20, 1.50].map((f) => Math.round(f * ftp))
 }
 
-function classifyPowerZone(power: number, boundaries: readonly number[]): number {
+export function classifyPowerZone(power: number, boundaries: readonly number[]): number {
   for (let i = boundaries.length - 1; i >= 0; i--) {
     if (power >= (boundaries[i] ?? 0)) return i + 2
   }

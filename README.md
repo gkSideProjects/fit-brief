@@ -38,9 +38,9 @@ fit-brief extracts the training-relevant information and produces a compact Mark
 ...
 
 ## Auto-detected Efforts
-| # | Start | Duration | Avg W | NP | Avg HR | Avg Speed | Work | Pa:Hr |
-| 1 | 5:08 | 1:09:37 | 159 W | 160 W | 143 bpm | — | 665.7 kJ | +1.3% |
-| 2 | 1:15:31 | 2:18 | 352 W | 381 W | 173 bpm | — | 48.6 kJ | — |
+| # | Zone | Start | Duration | Avg W | NP | Avg HR | Avg Speed | Work | Pa:Hr |
+| 1 | Z2 | 5:08 | 1:09:37 | 159 W | 160 W | 143 bpm | — | 665.7 kJ | +1.3% |
+| 2 | Z7 | 1:15:31 | 2:18 | 352 W | 381 W | 173 bpm | — | 48.6 kJ | — |
 
 ## Power-Duration Curve Highlights
 | Duration | Peak Power |
@@ -64,8 +64,8 @@ Three stages: parse the binary, extract coaching-relevant metrics, serialise to 
 - **Summary**: duration, distance, work, avg/max/NP power, HR, cadence, TSS, IF, calories
 - **Power zones**: Coggan 7-zone model from FTP
 - **HR zones**: 5-zone model from max HR
-- **Auto-detected efforts**: sustained efforts (60s+, above Z2 floor) and sprints (above 280% FTP), with grace periods to prevent fragmentation
-- **Power-duration curve**: peak mean power at standard durations (5s to 1h)
+- **Auto-detected efforts**: zone-based effort detection (Coggan 7-zone model) with per-zone grace periods and minimum durations
+- **Power-duration curve**: peak mean power at standard durations (5s to 2h)
 - **Aerobic decoupling**: per-effort Pa:Hr drift with CV gate (only on steady efforts 20min+)
 
 ## Design decisions
@@ -95,10 +95,11 @@ const markdown = toMarkdown(compact)
 console.log(markdown)
 ```
 
-Or use the included script:
+Or use the included scripts:
 
 ```bash
-pnpm brief <path-to-file.fit> [ftpW] [maxHrBpm] [--timeseries]  # compact markdown
+pnpm brief <path-to-file.fit> [ftpW] [maxHrBpm] [--timeseries]  # single ride → compact markdown
+pnpm history <folder> [ftpW] [maxHrBpm] [outputFile]             # folder of rides → training history
 ```
 
 ## Configuration
@@ -107,11 +108,40 @@ pnpm brief <path-to-file.fit> [ftpW] [maxHrBpm] [--timeseries]  # compact markdo
 toCompact(activity, {
   ftpW: 250,                // enables power zones, effort detection, TSS/IF
   maxHrBpm: 201,            // enables HR zones
-  graceSeconds: 10,         // grace period for sustained effort detection (default: 10)
   includeTimeseries: false, // include 10s downsampled timeseries (default: false)
   resolutionSeconds: 10,    // timeseries resolution if enabled (default: 10)
 })
 ```
+
+## Training history
+
+For long-term context, `pnpm history` batch-processes a folder of `.fit` files into a single Markdown file with one line per ride (~50 tokens each). This is designed to be dropped into a Claude Project as persistent context, giving the model visibility into months or years of training data without bloating the context window.
+
+```bash
+pnpm history ./rides 250 201 training-history.md
+```
+
+The output includes an all-time power PBs table and one line per ride with inline effort detection:
+
+```markdown
+# Training History
+
+401 rides | FTP: 250W | Max HR: 201bpm
+
+## All-Time Power PBs
+| Duration | Power | Date |
+|----------|-------|------|
+| 0:05 | 723W | 2025-09-18 |
+| 1:00 | 390W | 2026-04-29 |
+| 1:00:00 | 207W | 2025-04-09 |
+...
+
+2024-09-10 | 1:30:15 | 43km | 154W/179NP | 145bpm | TSS 77 | IF 0.72 | Z2 1:18:19 156W 145bpm -4.1%; Z7 1:47 412W 178bpm
+2024-09-12 | 0:45:22 | 18km | 198W/215NP | 158bpm | TSS 45 | IF 0.86 | Z3 32:10 201W 155bpm; Z6 0:38 345W 172bpm
+...
+```
+
+With 401 rides this produces ~25k tokens — well within a Claude Project's context budget, and enough for the model to spot trends, compare efforts across months, and ground coaching advice in your actual history.
 
 ## Limitations
 

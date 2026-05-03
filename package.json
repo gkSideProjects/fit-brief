@@ -32,6 +32,7 @@
     "lint": "oxlint src",
     "format": "oxfmt src",
     "brief": "node --import tsx/esm scripts/brief.ts",
+    "history": "node --import tsx/esm scripts/history.ts",
     "eval:export": "node --import tsx/esm eval/harness.ts"
   },
   "dependencies": {

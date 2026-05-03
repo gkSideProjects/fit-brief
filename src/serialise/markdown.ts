@@ -84,13 +84,14 @@ function effortsSection(a: CompactActivity): string {
   const rows = a.efforts.map((e, i) => effortRow(i + 1, e))
   return [
     '## Auto-detected Efforts',
-    '| # | Start | Duration | Avg W | NP | Avg HR | Avg Speed | Work | Pa:Hr |',
-    '|---|-------|----------|-------|----|--------|-----------|------|-------|',
+    '| # | Zone | Start | Duration | Avg W | NP | Avg HR | Avg Speed | Work | Pa:Hr |',
+    '|---|------|-------|----------|-------|----|--------|-----------|------|-------|',
     ...rows,
   ].join('\n')
 }
 
 function effortRow(n: number, e: Effort): string {
+  const zone = `Z${e.zone}`
   const start = formatDuration(e.startOffsetSeconds)
   const dur = formatDuration(e.durationSeconds)
   const avgP = e.avgPowerW !== undefined ? `${e.avgPowerW} W` : '—'
@@ -100,7 +101,7 @@ function effortRow(n: number, e: Effort): string {
   const decoup = e.aerobicDecoupling !== undefined
     ? `${e.aerobicDecoupling >= 0 ? '+' : ''}${e.aerobicDecoupling}%`
     : '—'
-  return `| ${n} | ${start} | ${dur} | ${avgP} | ${np} | ${hr} | ${speed} | ${e.workKj} kJ | ${decoup} |`
+  return `| ${n} | ${zone} | ${start} | ${dur} | ${avgP} | ${np} | ${hr} | ${speed} | ${e.workKj} kJ | ${decoup} |`
 }
 
 function pdCurveSection(a: CompactActivity): string {

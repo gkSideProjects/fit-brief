@@ -2,15 +2,10 @@ node_modules/
 dist/
 docs/
 
-# eval fixtures are binary and personal — document in eval/README.md how to add your own
-eval/fixtures/*.fit
-eval/fixtures/*.FIT
-eval/fixtures/*.fit.gz
-eval/fixtures/*.xml
-
-# eval exported prompts and data (regenerated from fixtures)
-eval/output/
+CLAUDE.md
+eval/
 
 *.log
 .DS_Store
 .claude/
+scripts/inspect.ts
